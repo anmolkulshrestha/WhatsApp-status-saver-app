@@ -6,18 +6,18 @@ import androidx.documentfile.provider.DocumentFile
 import kotlinx.android.parcel.Parcelize
 import java.io.File
 
-
-data class Status(  var file:DocumentFile){
-
-
-
-    var title:String=file.name!!
+@Parcelize
+data class Status(  var filetitle:String,var fileUri:String,var lastModified:Long):Parcelable{
 
 
-    var fileUri:String=file.uri.toString()
+
+    var title:String=filetitle
 
 
-    var isVideo:Int=if(file.name!!.endsWith(".mp4")){  1}else{0}
+    var Uri:String=fileUri
+    var lastmodified:Long=lastModified
+
+    var isVideo:Int=if(title.endsWith(".mp4")){  1}else{0}
 
 
 

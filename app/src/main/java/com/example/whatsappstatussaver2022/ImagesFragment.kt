@@ -81,7 +81,9 @@ class ImagesFragment : Fragment() {
             isWritePermissionGranted=permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWritePermissionGranted
             if(isReadPermissionGranted && isWritePermissionGranted){
 
-
+      getstatuses()
+            }else{
+                requestOrUpdatePermissions()
             }
 
         }
@@ -211,7 +213,7 @@ class ImagesFragment : Fragment() {
        if(fileDoc!=null && fileDoc.size>0){
            for(file:DocumentFile in fileDoc!!){
                if(!file.name!!.endsWith(".nomedia")){
-                   statusList.add(Status(file))
+                   statusList.add(Status(file.name.toString(),file.uri.toString(),file.lastModified()))
                }
 
 
@@ -250,7 +252,7 @@ class ImagesFragment : Fragment() {
 
     fun belowsdk29(){
 grantpermissionbutton.visibility=View.GONE
-
+progressBar.visibility=View.GONE
 checkIfPermissionGrantedForBelowSdk29()
 
     }
@@ -291,9 +293,11 @@ checkIfPermissionGrantedForBelowSdk29()
 
    fun getstatuses(){
        if(WHATS_APP_STATUS_DIRECTORY.exists()){
+           progressBar.visibility=View.VISIBLE
            execute(WHATS_APP_STATUS_DIRECTORY)
        }
        else if(WHATS_APP_STATUS_DIRECTORY_NEW.exists()){
+           progressBar.visibility=View.VISIBLE
            execute(WHATS_APP_STATUS_DIRECTORY_NEW)
        }
        else{
@@ -313,21 +317,21 @@ checkIfPermissionGrantedForBelowSdk29()
         CoroutineScope(Dispatchers.IO).launch {
 
 
-            var job1= launch {files= dir.listFiles().toMutableList()
+            var job= launch {files= dir.listFiles().toMutableList()
             }
-            job1.join()
+            job.join()
             statuslist.clear()
             if(files!=null && files.size >0 ){
 
                 for (file in files){
 
-                    var status=Status(file)
+                    var status=Status(file.name.toString(),file.absolutePath.toString(),file.lastModified())
                     if (  status.title.endsWith(".jpg")|| status.title.endsWith(".mp4")) {
                         statuslist.add(status)
                     }
 
                 }
-                statuslist.sortByDescending { it.file.lastModified() }
+                statuslist.sortByDescending { it.lastModified}
 
 
                 withContext(Dispatchers.Main){
@@ -376,4 +380,4 @@ checkIfPermissionGrantedForBelowSdk29()
 private const val OPEN_DOCUMENT_REQUEST_CODE = 0x33
 private const val TAG = "MainActivity"
 private const val LAST_OPENED_URI_KEY =
-    "com.example.android.tionopendocument.pref.LAS_OPENED_URI_KEY"
+    "com.example.android.ionopendocument.pref.LAS_OPENED_URI_KEY"

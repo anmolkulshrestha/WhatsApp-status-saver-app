@@ -11,6 +11,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.whatsappstatussaver2022.R
+import com.example.whatsappstatussaver2022.common.sdk29AndUp
 import com.example.whatsappstatussaver2022.models.Status
 import java.io.File
 
@@ -26,7 +27,8 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var image=itemview.findViewById<ImageView>(R.id.image_view)
 
         fun bind(status: Status){
-            Glide.with(context).load(status.fileUri.toUri()).into(image)
+            sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(image) }?:Glide.with(context).load(File(status.fileUri)).into(image)
+
         }
 
 
@@ -37,7 +39,7 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var video=itemview.findViewById<ImageView>(R.id.video_view)
 
         fun bind(status: Status){
-            Glide.with(context).asBitmap().load(status.file.uri).fitCenter().centerCrop().into(video)
+            sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(video) }?:Glide.with(context).load(File(status.fileUri)).into(video)
         }
 
 
