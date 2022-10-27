@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/imagesFragment">
+    <fragment
+        android:id="@+id/imagesFragment"
+        android:name="com.example.whatsappstatussaver2022.ImagesFragment"
+        android:label="fragment_images"
+        tools:layout="@layout/fragment_images" >
+        <action
+            android:id="@+id/action_imagesFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoFragment"
+        android:name="com.example.whatsappstatussaver2022.VideoFragment"
+        android:label="fragment_video"
+        tools:layout="@layout/fragment_video" >
+        <action
+            android:id="@+id/action_videoFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/savedFileFragment"
+        android:name="com.example.whatsappstatussaver2022.SavedFileFragment"
+        android:label="fragment_saved_file"
+        tools:layout="@layout/fragment_saved_file" >
+        <action
+            android:id="@+id/action_savedFileFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
+        <action
+            android:id="@+id/action_savedFileFragment_to_videoViewFragment"
+            app:destination="@id/videoViewFragment" />
+        <action
+            android:id="@+id/action_savedFileFragment_to_settingsFragment2"
+            app:destination="@id/settingsFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/imageViewFragment"
+        android:name="com.example.whatsappstatussaver2022.ImageViewFragment"
+        android:label="fragment_image_view"
+        tools:layout="@layout/fragment_image_view" >
+        <action
+            android:id="@+id/action_imageViewFragment_to_imagesFragment"
+            app:destination="@id/imagesFragment" />
+        <action
+            android:id="@+id/action_imageViewFragment_to_videoFragment"
+            app:destination="@id/videoFragment" />
+        <action
+            android:id="@+id/action_imageViewFragment_to_savedFileFragment"
+            app:destination="@id/savedFileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/videoViewFragment"
+        android:name="com.example.whatsappstatussaver2022.VideoViewFragment"
+        android:label="fragment_video_view"
+        tools:layout="@layout/fragment_video_view" >
+        <action
+            android:id="@+id/action_videoViewFragment_to_savedFileFragment"
+            app:destination="@id/savedFileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment2"
+        android:name="com.example.whatsappstatussaver2022.settingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_settingsFragment2_to_savedFileFragment"
+            app:destination="@id/savedFileFragment" />
+    </fragment>
+</navigation>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:orientation="vertical"-->
+<!--    android:elevation="13.00dp"-->
+<!--    android:layout_margin="13.00dp"-->
+<!--    android:layout_height="156dp">-->
+<!--<com.google.android.material.imageview.ShapeableImageView-->
+<!--    android:id="@+id/image_view"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--</com.google.android.material.imageview.ShapeableImageView>-->
+<!--</LinearLayout>-->
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="156.00dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:elevation="13.00dp"
+
+    android:layout_margin="0dp"
+    app:cardCornerRadius="3dp"
+    app:cardUseCompatPadding="true">
+
+
+
+
+
+            <ImageView
+                android:id="@+id/image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+
+
+
+</com.google.android.material.card.MaterialCardView>

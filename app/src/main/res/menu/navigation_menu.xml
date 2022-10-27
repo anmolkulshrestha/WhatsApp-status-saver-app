@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Statuses"
+        android:icon="@drawable/ic_stauses_foreground"
+        android:id="@+id/imagesFragment"
+
+        />
+
+    <item android:title="Saved"
+        android:icon="@drawable/ic_saved_foreground"
+        android:id="@+id/savedFileFragment"/>
+
+    <item android:title="Settings"
+        android:icon="@drawable/ic_settings_foreground"
+        android:id="@+id/settingsFragment2"/>
+</menu>
