@@ -10,10 +10,12 @@ import androidx.core.net.toUri
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.whatsappstatussaver2022.ImagesFragmentDirections
 import com.example.whatsappstatussaver2022.R
 import com.example.whatsappstatussaver2022.common.sdk29AndUp
 import com.example.whatsappstatussaver2022.models.Status
 import java.io.File
+import kotlin.math.absoluteValue
 
 class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var context: Context
@@ -40,7 +42,7 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         fun bind(status: Status){
             sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(video) }?:Glide.with(context).load(File(status.fileUri)).into(video)
-        }
+               }
 
 
 
@@ -58,6 +60,7 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         var status=statuslist[position]
         if(status.isVideo==1){(holder as VideoViewHolder).apply {
+
             bind(status)
 //            video.setOnClickListener {
 //                val action=ImagesFragmentDirections.actionFirstfirstToVideoExoPlayerFragment(status)
@@ -74,13 +77,15 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         }
         else{(holder as ImageViewHolder).apply {
+
             bind(status)
-//            itemView.setOnClickListener {
-//                val action=ImagesFragmentDirections.actionImagesFragmentToImageViewFragment(status)
-//
-//                itemView.findNavController().navigate(action)
-//                Log.d("lll", "pppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
-//            }
+            itemView.setOnClickListener {
+                val action=ImagesFragmentDirections.actionImagesFragmentToImageViewFragment(statuslist.toTypedArray(),position)
+
+                itemView.findNavController().navigate(action)
+
+
+            }
         }}
 
 

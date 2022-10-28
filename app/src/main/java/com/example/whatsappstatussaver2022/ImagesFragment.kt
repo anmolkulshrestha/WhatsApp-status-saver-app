@@ -93,19 +93,22 @@ class ImagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpPermissionDialog()
-     setuprecyclerview()
-
+        setuprecyclerview()
+        Log.d("anmol", "gyedubgye")
         sdk29AndUp {
+            Log.d("anmol", "gyedubgye")
             checkIfPermissionGrantedForAndroid10AndAbove()
             grantpermissionbutton.setOnClickListener {
-              //  if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){ getpermissionforfolder() }
+
                 getpermissionforfolder()
 
-            }?:belowsdk29()
-        }
-
+            }
+            Log.d("anmol", "gyedubgye")
+     }?:belowsdk29()
+        Log.d("anmol", "gyedubgye")
 
     }
+
     fun setuprecyclerview(){
         recyclerView.apply {
             layoutManager= GridLayoutManager(activity,3)
@@ -127,7 +130,7 @@ class ImagesFragment : Fragment() {
 
         val grantpermissionbutton: Button = dialog.findViewById(R.id.grantpermission) as Button
         grantpermissionbutton.setOnClickListener(object : View.OnClickListener {
-            @RequiresApi(Build.VERSION_CODES.Q)
+            @RequiresApi(Build.VERSION_CODES.R)
             override fun onClick(p0: View?) {
                 getpermissionforfolder()
             }
@@ -254,7 +257,7 @@ class ImagesFragment : Fragment() {
 grantpermissionbutton.visibility=View.GONE
 progressBar.visibility=View.GONE
 checkIfPermissionGrantedForBelowSdk29()
-
+        Log.d("anmol", "belowsdk29: ")
     }
 
     fun checkIfPermissionGrantedForBelowSdk29(){
@@ -280,13 +283,11 @@ checkIfPermissionGrantedForBelowSdk29()
         if(!isWritePermissionGranted) {
             permissionrequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
-//        if(!isManageExternalstoragePermissionGranted) {
-//            permissionrequest.add(Manifest.permission.MANAGE_EXTERNAL_STORAGE)
-//        }
+
 
         if(permissionrequest.isNotEmpty()){
             permissionlauncher.launch(permissionrequest.toTypedArray())
-//            Log.d("anmolkul", isManageExternalstoragePermissionGranted.toString())
+
         }
 
     }
@@ -380,4 +381,4 @@ checkIfPermissionGrantedForBelowSdk29()
 private const val OPEN_DOCUMENT_REQUEST_CODE = 0x33
 private const val TAG = "MainActivity"
 private const val LAST_OPENED_URI_KEY =
-    "com.example.android.ionopendocument.pref.LAS_OPENED_URI_KEY"
+    "com.example.android.ionopendocument.pef.LAS_OPENED_URI_KEY"

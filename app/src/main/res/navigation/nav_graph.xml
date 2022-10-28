@@ -51,6 +51,12 @@
         <action
             android:id="@+id/action_imageViewFragment_to_savedFileFragment"
             app:destination="@id/savedFileFragment" />
+        <argument
+            android:name="statuslist"
+            app:argType="com.example.whatsappstatussaver2022.models.Status[]" />
+        <argument
+            android:name="position"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/videoViewFragment"
