@@ -17,9 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.whatsappstatussaver2022.ImageViewFragmentDirections
 import com.example.whatsappstatussaver2022.R
-import com.example.whatsappstatussaver2022.common.savePhotoGalley
-import com.example.whatsappstatussaver2022.common.saveVideoGalley
-import com.example.whatsappstatussaver2022.common.sdk29AndUp
+import com.example.whatsappstatussaver2022.common.*
+
 import com.example.whatsappstatussaver2022.models.Status
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
@@ -82,31 +81,42 @@ image.setImageBitmap(bm)
 
     @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        var status=statuslist[position]
-        if(status.isVideo==1){(holder as VideoViewHolder).apply {
-            bind(status)
-            video.setOnClickListener {
-                val action=ImageViewFragmentDirections.actionImageViewFragmentToVideoViewFragment(status)
-                itemView.findNavController().navigate(action)
+        var status = statuslist[position]
+
+        if (status.isVideo == 1) {
+            (holder as VideoViewHolder).apply {
+                bind(status)
+                video.setOnClickListener {
+                    val action =
+                        ImageViewFragmentDirections.actionImageViewFragmentToVideoViewFragment(
+                            status
+                        )
+                    itemView.findNavController().navigate(action)
 
 
-          }
-            save.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    saveVideoGalley(context,"iio", Uri.parse(status.fileUri))
                 }
+                var displayname =
+                    "statussaver2022@qwertyuio!@#" + status.title.toString().split(".")[0]
+                save.setOnClickListener {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        launch {
+                            saveVideoGallery(context, displayname, Uri.parse(status.fileUri))
+                            saveVideoToInternalStorage(displayname,Uri.parse(status.fileUri),context)
+                        }
 
+
+                    }
+
+                }
             }
-        }
 //            (holder as VideoViewHolder).video.setOnClickListener {
 //
 //            }
 
 
-
-        }
-        else{(holder as ImageViewHolder).apply {
-            bind(status)
+        } else {
+            (holder as ImageViewHolder).apply {
+                bind(status)
 //            image.layoutParams= RecyclerView.LayoutParams(
 //                ((image.width)*0.75).toInt(),
 //                RecyclerView.LayoutParams.MATCH_PARENT
@@ -118,20 +128,30 @@ image.setImageBitmap(bm)
 //                Log.d("lll", "pppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
 //            }
 
-            save.setOnClickListener {
+                save.setOnClickListener {
 
-                var bm=ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
+                    var bm = ImageDecoder.decodeBitmap(
+                        ImageDecoder.createSource(
+                            context.contentResolver,
+                            status.fileUri.toUri()
+                        )
+                    )
+                    var displayname =
+                        "statussaver2022@qwertyuio!@#" + status.title.toString().split(".")[0]
+                    CoroutineScope(Dispatchers.IO).launch {
+                      launch{savePhotoGalley(context, displayname, bm)}
 
-                CoroutineScope(Dispatchers.IO).launch {
-                    savePhotoGalley(context,"tty",bm)
+                        launch {
+                            savePhotoToInternalStorage(displayname, bm, context)
+                        }
+
+                    }
                 }
-
             }
-        }}
 
 
+        }
     }
-
     override fun getItemCount(): Int {
         return statuslist.size
     }
