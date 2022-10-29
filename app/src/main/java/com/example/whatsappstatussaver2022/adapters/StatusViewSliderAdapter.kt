@@ -2,18 +2,29 @@ package com.example.whatsappstatussaver2022.adapters
 
 import android.content.Context
 import android.graphics.*
+import android.net.Uri
+import android.os.Build
 import android.system.Os.bind
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.whatsappstatussaver2022.ImageViewFragmentDirections
 import com.example.whatsappstatussaver2022.R
+import com.example.whatsappstatussaver2022.common.savePhotoGalley
+import com.example.whatsappstatussaver2022.common.saveVideoGalley
 import com.example.whatsappstatussaver2022.common.sdk29AndUp
 import com.example.whatsappstatussaver2022.models.Status
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.File
 
 
@@ -27,6 +38,8 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class ImageViewHolder(itemview: View): RecyclerView.ViewHolder(itemview){
 
         var image=itemview.findViewById<ImageView>(R.id.iio)
+        var save=itemview.findViewById<FloatingActionButton>(R.id.save)
+
 var ee=itemview.measuredHeight
         fun bind(status: Status) {
             sdk29AndUp {
@@ -47,7 +60,7 @@ image.setImageBitmap(bm)
     inner class VideoViewHolder(itemview: View): RecyclerView.ViewHolder(itemview){
 
         var video=itemview.findViewById<ImageView>(R.id.iio)
-
+   var save=itemview.findViewById<FloatingActionButton>(R.id.save)
         fun bind(status: Status){
             sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(video) } ?: Glide.with(context).load(
                 File(status.fileUri)
@@ -62,21 +75,28 @@ image.setImageBitmap(bm)
         context=parent.context
 
         if(viewType==0){return ImageViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_slider_item,parent,false))}
-        else{return VideoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_slider_item,parent,false))}
+        else{return VideoViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.video_slider_item,parent,false))}
 
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         var status=statuslist[position]
         if(status.isVideo==1){(holder as VideoViewHolder).apply {
             bind(status)
-//            video.setOnClickListener {
-//                val action=ImagesFragmentDirections.actionFirstfirstToVideoExoPlayerFragment(status)
-//                itemView.findNavController().navigate(action)
-//
-//
-//            }
+            video.setOnClickListener {
+                val action=ImageViewFragmentDirections.actionImageViewFragmentToVideoViewFragment(status)
+                itemView.findNavController().navigate(action)
+
+
+          }
+            save.setOnClickListener {
+                CoroutineScope(Dispatchers.IO).launch {
+                    saveVideoGalley(context,"iio", Uri.parse(status.fileUri))
+                }
+
+            }
         }
 //            (holder as VideoViewHolder).video.setOnClickListener {
 //
@@ -97,6 +117,16 @@ image.setImageBitmap(bm)
 //                itemView.findNavController().navigate(action)
 //                Log.d("lll", "pppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
 //            }
+
+            save.setOnClickListener {
+
+                var bm=ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
+
+                CoroutineScope(Dispatchers.IO).launch {
+                    savePhotoGalley(context,"tty",bm)
+                }
+
+            }
         }}
 
 

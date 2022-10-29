@@ -62,12 +62,12 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if(status.isVideo==1){(holder as VideoViewHolder).apply {
 
             bind(status)
-//            video.setOnClickListener {
-//                val action=ImagesFragmentDirections.actionFirstfirstToVideoExoPlayerFragment(status)
-//                itemView.findNavController().navigate(action)
-//
-//
-//            }
+            video.setOnClickListener {
+                val action=ImagesFragmentDirections.actionImagesFragmentToImageViewFragment(statuslist.toTypedArray(),position)
+
+                itemView.findNavController().navigate(action)
+
+            }
         }
 //            (holder as VideoViewHolder).video.setOnClickListener {
 //
@@ -80,6 +80,7 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             bind(status)
             itemView.setOnClickListener {
+
                 val action=ImagesFragmentDirections.actionImagesFragmentToImageViewFragment(statuslist.toTypedArray(),position)
 
                 itemView.findNavController().navigate(action)

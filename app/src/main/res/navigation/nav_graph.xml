@@ -12,15 +12,9 @@
         <action
             android:id="@+id/action_imagesFragment_to_imageViewFragment"
             app:destination="@id/imageViewFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/videoFragment"
-        android:name="com.example.whatsappstatussaver2022.VideoFragment"
-        android:label="fragment_video"
-        tools:layout="@layout/fragment_video" >
         <action
-            android:id="@+id/action_videoFragment_to_imageViewFragment"
-            app:destination="@id/imageViewFragment" />
+            android:id="@+id/action_imagesFragment_to_videoViewFragment"
+            app:destination="@id/videoViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/savedFileFragment"
@@ -46,9 +40,6 @@
             android:id="@+id/action_imageViewFragment_to_imagesFragment"
             app:destination="@id/imagesFragment" />
         <action
-            android:id="@+id/action_imageViewFragment_to_videoFragment"
-            app:destination="@id/videoFragment" />
-        <action
             android:id="@+id/action_imageViewFragment_to_savedFileFragment"
             app:destination="@id/savedFileFragment" />
         <argument
@@ -57,6 +48,12 @@
         <argument
             android:name="position"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_imageViewFragment_self"
+            app:destination="@id/imageViewFragment" />
+        <action
+            android:id="@+id/action_imageViewFragment_to_videoViewFragment"
+            app:destination="@id/videoViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoViewFragment"
@@ -66,6 +63,15 @@
         <action
             android:id="@+id/action_videoViewFragment_to_savedFileFragment"
             app:destination="@id/savedFileFragment" />
+        <action
+            android:id="@+id/action_videoViewFragment_to_imagesFragment"
+            app:destination="@id/imagesFragment" />
+        <argument
+            android:name="status"
+            app:argType="com.example.whatsappstatussaver2022.models.Status" />
+        <action
+            android:id="@+id/action_videoViewFragment_to_imageViewFragment"
+            app:destination="@id/imageViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment2"

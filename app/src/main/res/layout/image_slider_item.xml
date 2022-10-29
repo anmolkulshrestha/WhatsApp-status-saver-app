@@ -58,7 +58,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.9"
-                    app:layout_constraintStart_toEndOf="@+id/floatingActionButton4"
+                    app:layout_constraintStart_toEndOf="@+id/save"
                     app:layout_constraintTop_toTopOf="parent"
                    android:backgroundTint="#00FF00" />
 
@@ -71,7 +71,7 @@
                     android:clickable="true"
                     android:src="@drawable/ic_baseline_share_24"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/floatingActionButton4"
+                    app:layout_constraintEnd_toStartOf="@+id/save"
                     app:layout_constraintHorizontal_bias="0.1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -79,7 +79,7 @@
                     />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/floatingActionButton4"
+                    android:id="@+id/save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

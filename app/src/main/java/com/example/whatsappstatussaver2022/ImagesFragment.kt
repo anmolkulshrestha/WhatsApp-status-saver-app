@@ -96,6 +96,7 @@ class ImagesFragment : Fragment() {
         setuprecyclerview()
         Log.d("anmol", "gyedubgye")
         sdk29AndUp {
+            requestOrUpdatePermissions()
             Log.d("anmol", "gyedubgye")
             checkIfPermissionGrantedForAndroid10AndAbove()
             grantpermissionbutton.setOnClickListener {
