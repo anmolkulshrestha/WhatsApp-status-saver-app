@@ -6,48 +6,50 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.whatsappstatussaver2022.R
+import com.example.whatsappstatussaver2022.SavedFileFragmentDirections
 import com.example.whatsappstatussaver2022.common.sdk29AndUp
-import com.example.whatsappstatussaver2022.models.InternalStoragePhoto
-import com.example.whatsappstatussaver2022.models.InternalStorageVideo
+import com.example.whatsappstatussaver2022.models.Status
 import java.io.File
 
 
 class SavedFileAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var context: Context
-    var statuslist:List<InternalStoragePhoto> = mutableListOf<InternalStoragePhoto>()
-    fun bindlist(statuslist:List<InternalStoragePhoto>){
+    var statuslist:List<Status> = mutableListOf<Status>()
+    fun bindlist(statuslist:List<Status>){
         this.statuslist=statuslist
 
     }
-    inner class ImageViewHolder(itemview: View): RecyclerView.ViewHolder(itemview){
+    inner class ImageViewHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
 
-        var image=itemview.findViewById<ImageView>(R.id.image_view)
+        var image = itemview.findViewById<ImageView>(R.id.image_view)
 
-        fun bind(status: InternalStoragePhoto){
-            image.setImageBitmap(status.bmp)
+        fun bind(status: Status) {
+
+
+            sdk29AndUp {
+
+
+                Glide.with(context).load(status.fileUri).into(image)
+            } ?: Glide.with(context).load(
+                File(status.fileUri.toString())
+            ).into(image)
+
         }
-//            sdk29AndUp {
-//
-//
-////                Glide.with(context).load(status.contentUri).into(image) } ?: Glide.with(context).load(
-////                File(status.contentUri.toString())
-////            ).into(image)
-//
-//        }
-
-
 
     }
+
+
     inner class VideoViewHolder(itemview: View): RecyclerView.ViewHolder(itemview) {
 
         var video = itemview.findViewById<ImageView>(R.id.video_view)
 
-        fun bind(status: InternalStorageVideo) {
-            sdk29AndUp { Glide.with(context).load(status.videouri).into(video) } ?: Glide.with(context).load(
-                File(status.videouri.toString())
+        fun bind(status:Status) {
+            sdk29AndUp { Glide.with(context).load(status.fileUri).into(video) } ?: Glide.with(context).load(
+                File(status.fileUri.toString())
             ).into(video)
         }
 
@@ -68,12 +70,12 @@ class SavedFileAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         if(status.isVideo==1){(holder as VideoViewHolder).apply {
 
             bind(status)
-//            video.setOnClickListener {
-//                val action= ImagesFragmentDirections.actionImagesFragmentToImageViewFragment(statuslist.toTypedArray(),position)
-//
-//                itemView.findNavController().navigate(action)
-//
-//            }
+            video.setOnClickListener {
+                val action= SavedFileFragmentDirections.actionSavedFileFragmentToImageViewFragment(statuslist.toTypedArray(),position)
+
+                itemView.findNavController().navigate(action)
+
+            }
         }
 //            (holder as VideoViewHolder).video.setOnClickListener {
 //
@@ -85,14 +87,14 @@ class SavedFileAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
       else{  (holder as ImageViewHolder).apply {
 
             bind(status)
-//            itemView.setOnClickListener {
-//
-//                val action= ImagesFragmentDirections.actionImagesFragmentToImageViewFragment(statuslist.toTypedArray(),position)
-//
-//                itemView.findNavController().navigate(action)
-//
-//
-//            }
+            itemView.setOnClickListener {
+
+                val action= SavedFileFragmentDirections.actionSavedFileFragmentToImageViewFragment(statuslist.toTypedArray(),position)
+
+                itemView.findNavController().navigate(action)
+
+
+            }
         }
 
 

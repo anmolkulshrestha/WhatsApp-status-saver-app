@@ -10,8 +10,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.whatsappstatussaver2022.adapters.SavedFileAdapter
-
-import com.example.whatsappstatussaver2022.common.loadPhotosFromInternalStorage
+import com.example.whatsappstatussaver2022.common.loadFilesFromInternalStorage
 import kotlinx.coroutines.*
 
 
@@ -33,18 +32,16 @@ class SavedFileFragment : Fragment() {
        oop=view.findViewById(R.id.imageView)
 
          CoroutineScope(Dispatchers.IO).launch {
-           var photos= loadPhotosFromInternalStorage(requireContext())
-var ee=photos.isEmpty()
-             Log.d("lk", ee.toString())
-            for(item in photos){
-                Log.d("iyu", item.name)
-            }
+           var statuses= loadFilesFromInternalStorage(requireContext())
+
+
+
      withContext(Dispatchers.Main){
          // oop.setImageURI(photos[0].contentUri)
          recyclerView.layoutManager=GridLayoutManager(requireContext(),3)
          var photoadapter=SavedFileAdapter()
          recyclerView.adapter=photoadapter
-          photoadapter.bindlist(photos)}
+          photoadapter.bindlist(statuses)}
 
 
 

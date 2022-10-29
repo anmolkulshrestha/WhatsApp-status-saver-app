@@ -14,11 +14,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.whatsappstatussaver2022.adapters.StatusSliderAdapter
+import com.example.whatsappstatussaver2022.common.loadallFilesFromInternalStorage
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ImageViewFragment : Fragment() {
     private val args by navArgs<ImageViewFragmentArgs>()
 lateinit var recyclerView: RecyclerView
+lateinit var save:FloatingActionButton
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -34,6 +40,14 @@ lateinit var recyclerView: RecyclerView
 
 
         var view= inflater.inflate(R.layout.fragment_image_view, container, false)
+
+
+
+
+
+
+
+
 
 
         return view

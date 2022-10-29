@@ -4,14 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import androidx.core.net.toUri
-import com.example.whatsappstatussaver2022.models.InternalStoragePhoto
-import com.example.whatsappstatussaver2022.models.InternalStorageVideo
+import com.example.whatsappstatussaver2022.models.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -98,13 +96,15 @@ it?.write(inputstream?.readBytes())
 }
 
 
- suspend fun loadPhotosFromInternalStorage(context: Context): List<InternalStoragePhoto> {
+ suspend fun loadFilesFromInternalStorage(context: Context): List<Status> {
     return withContext(Dispatchers.IO) {
+
         val files = context.filesDir.listFiles()
-        files?.filter { it.canRead() && it.isFile && it.name.endsWith(".jpg") }?.map {
+
+        files?.filter { it.canRead() && it.isFile && (it.name.endsWith(".jpg") || it.name.endsWith(".mp4")) }?.map {
             val oo = it.toUri()
           //  val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            InternalStoragePhoto(it.name, oo)
+            Status(it.name,it.toUri().toString(),it.lastModified())
         } ?: listOf()
     }
 }
@@ -151,13 +151,16 @@ suspend fun saveVideoToInternalStorage(filename: String, videoUri: Uri,context: 
     }
 }
 
-suspend fun loadVideoesFromInternalStorage(context: Context): List<InternalStorageVideo> {
-    return withContext(Dispatchers.IO) {
-        val files = context.filesDir.listFiles()
-        files?.filter { it.canRead() && it.isFile && it.name.endsWith(".mp4") }?.map {
+suspend fun loadallFilesFromInternalStorage(context: Context) {
+    val files= mutableListOf<String>()
+     withContext(Dispatchers.IO) {
 
+        val files = context.filesDir.listFiles().toMutableList()
+         files?.filter { it.canRead() && it.isFile && (it.name.endsWith(".jpg") || it.name.endsWith(".mp4")) }?.map {
 
-           InternalStorageVideo(it.name,it.toUri())
-        } ?: listOf()
+             Log.d("allow", it.name)
+         } ?: listOf()
+
     }
+
 }

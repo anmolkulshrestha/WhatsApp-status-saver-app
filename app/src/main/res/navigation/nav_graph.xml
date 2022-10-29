@@ -30,6 +30,9 @@
         <action
             android:id="@+id/action_savedFileFragment_to_settingsFragment2"
             app:destination="@id/settingsFragment2" />
+        <action
+            android:id="@+id/action_savedFileFragment_to_imageViewFragment2"
+            app:destination="@id/imageViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/imageViewFragment"
@@ -54,6 +57,9 @@
         <action
             android:id="@+id/action_imageViewFragment_to_videoViewFragment"
             app:destination="@id/videoViewFragment" />
+        <action
+            android:id="@+id/action_imageViewFragment_to_savedFileFragment2"
+            app:destination="@id/savedFileFragment" />
     </fragment>
     <fragment
         android:id="@+id/videoViewFragment"
