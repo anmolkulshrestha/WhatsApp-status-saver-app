@@ -52,22 +52,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="#00FF00"
                     android:clickable="true"
-                    app:backgroundTint="#64FFDA"
 
+                    app:backgroundTint="#64FFDA"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.9"
                     app:layout_constraintStart_toEndOf="@+id/save"
                     app:layout_constraintTop_toTopOf="parent"
-                   android:backgroundTint="#00FF00" />
+                    app:layout_constraintVertical_bias="1.0" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/floatingActionButton3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#64FFDA"
                     android:layout_weight="1"
+                    android:backgroundTint="#64FFDA"
                     android:clickable="true"
                     android:src="@drawable/ic_baseline_share_24"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -75,23 +76,33 @@
                     app:layout_constraintHorizontal_bias="0.1"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.5"
-                    />
+                    app:layout_constraintVertical_bias="0.571" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/save"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:clickable="true"
-
-                    android:src="@drawable/ic_baseline_arrow_downward_24"
                     android:backgroundTint="#64FFDA"
+
+                    android:clickable="true"
+                    android:src="@drawable/ic_baseline_arrow_downward_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                     />
+                    app:srcCompat="@drawable/ic_baseline_delete_24" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>

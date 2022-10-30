@@ -12,7 +12,7 @@
         <action
             android:id="@+id/action_imagesFragment_to_imageViewFragment"
             app:destination="@id/imageViewFragment"
-            app:enterAnim="@android:anim/fade_out" />
+            app:enterAnim="@anim/bottomtotop" />
         <action
             android:id="@+id/action_imagesFragment_to_videoViewFragment"
             app:destination="@id/videoViewFragment" />
