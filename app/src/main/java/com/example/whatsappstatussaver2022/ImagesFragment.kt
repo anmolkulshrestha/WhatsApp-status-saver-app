@@ -38,6 +38,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.whatsappstatussaver2022.adapters.StatusAdapter
 import com.example.whatsappstatussaver2022.common.*
 import com.example.whatsappstatussaver2022.models.Status
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.fragment_images.*
 import kotlinx.android.synthetic.main.video_item.view.*
 import kotlinx.coroutines.CoroutineScope
@@ -98,6 +99,7 @@ class ImagesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpPermissionDialog()
         setuprecyclerview()
+        activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility=View.VISIBLE
         progressBar=view.findViewById(R.id.progressBar)
 
         sdk29AndUp {

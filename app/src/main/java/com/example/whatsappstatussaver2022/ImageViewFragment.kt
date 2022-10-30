@@ -65,7 +65,7 @@ lateinit var save:FloatingActionButton
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-     requestOrUpdatePermissions()
+
         permissionlauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
                 permissions->
             //   isManageExternalstoragePermissionGranted=permissions[Manifest.permission.MANAGE_EXTERNAL_STORAGE] ?: isManageExternalstoragePermissionGranted
@@ -75,6 +75,7 @@ lateinit var save:FloatingActionButton
             if(!isWritePermissionGranted){requestOrUpdatePermissions()}
 
         }
+        requestOrUpdatePermissions()
         recyclerView=view.findViewById(R.id.sliderrecyclerview)
 
         var layoutmanager=LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
@@ -95,7 +96,10 @@ lateinit var save:FloatingActionButton
         adapter.bindlist(args.statuslist.toMutableList())
 
         recyclerView.scrollToPosition(args.position)
-
+CoroutineScope(Dispatchers.IO).launch {
+    var list= loadallFilesFromInternalStorage(requireContext())
+    adapter.savedlist(list)
+}
 
 
     }

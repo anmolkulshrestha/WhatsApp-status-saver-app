@@ -44,7 +44,7 @@ var WHATS_APP_STATUS_DIRECTORY_NEW: File = File("/storage/emulated/0/Android/med
         } ?: MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
         val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "$displayName.jpg")
+            put(MediaStore.Images.Media.DISPLAY_NAME, "$displayName")
 
 
             put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -77,7 +77,7 @@ suspend fun saveVideoGallery(context: Context,displayName: String, videoUri: Uri
         } ?: MediaStore.Video.Media.EXTERNAL_CONTENT_URI
                    val inputstream=context.contentResolver.openInputStream(videoUri)
         val contentValues = ContentValues().apply {
-            put(MediaStore.Video.Media.DISPLAY_NAME, "$displayName.mp4")
+            put(MediaStore.Video.Media.DISPLAY_NAME, "$displayName")
             put(MediaStore.Video.Media.MIME_TYPE, "video/mp4")
 
         }
@@ -102,8 +102,8 @@ it?.write(inputstream?.readBytes())
         val files = context.filesDir.listFiles()
 
         files?.filter { it.canRead() && it.isFile && (it.name.endsWith(".jpg") || it.name.endsWith(".mp4")) }?.map {
-            val oo = it.toUri()
-          //  val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+
+
             Status(it.name,it.toUri().toString(),it.lastModified())
         } ?: listOf()
     }
@@ -113,7 +113,7 @@ it?.write(inputstream?.readBytes())
     return withContext(Dispatchers.IO) {
 
         try {
-            context.openFileOutput("$filename.jpg", MODE_PRIVATE).use { stream ->
+            context.openFileOutput("$filename", MODE_PRIVATE).use { stream ->
                 if(!bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream)) {
 
                     throw IOException("Couldn't save bitmap.")
@@ -135,7 +135,7 @@ suspend fun saveVideoToInternalStorage(filename: String, videoUri: Uri,context: 
     return withContext(Dispatchers.IO) {
         val inputstream=context.contentResolver.openInputStream(videoUri)
         try {
-            context.openFileOutput("$filename.mp4", MODE_PRIVATE).use { stream ->
+            context.openFileOutput("$filename", MODE_PRIVATE).use { stream ->
 
                 stream?.write(inputstream?.readBytes())
 
@@ -151,16 +151,24 @@ suspend fun saveVideoToInternalStorage(filename: String, videoUri: Uri,context: 
     }
 }
 
-suspend fun loadallFilesFromInternalStorage(context: Context) {
+suspend fun loadallFilesFromInternalStorage(context: Context):List<String> {
     val files= mutableListOf<String>()
-     withContext(Dispatchers.IO) {
+    return withContext(Dispatchers.IO) {
 
         val files = context.filesDir.listFiles().toMutableList()
          files?.filter { it.canRead() && it.isFile && (it.name.endsWith(".jpg") || it.name.endsWith(".mp4")) }?.map {
 
-             Log.d("allow", it.name)
+            it.name.split(".")[0]
          } ?: listOf()
 
     }
 
+}
+suspend fun deletePhotoFromInternalStorage(filename: String,context: Context): Boolean {
+    return try {
+        context.deleteFile(filename)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
 }

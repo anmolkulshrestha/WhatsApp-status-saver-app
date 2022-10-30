@@ -32,8 +32,13 @@ import java.io.File
 class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var context: Context
     var statuslist:List<Status> = mutableListOf<Status>()
+    var savedlist:List<String> = mutableListOf<String>()
     fun bindlist(statuslist:List<Status>){
         this.statuslist=statuslist
+
+    }
+    fun savedlist(statuslist:List<String>){
+        this.savedlist=statuslist
 
     }
     inner class ImageViewHolder(itemview: View): RecyclerView.ViewHolder(itemview){
@@ -45,7 +50,7 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
         fun bind(status: Status) {
-
+            if(status.filetitle.split(".")[0] in savedlist){save.setImageResource(R.drawable.ic_baseline_delete_24)}
 //                var bm=ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
 //
 //
@@ -63,7 +68,9 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         var video=itemview.findViewById<ImageView>(R.id.iio)
    var save=itemview.findViewById<FloatingActionButton>(R.id.save)
+
         fun bind(status: Status){
+            if(status.filetitle.split(".")[0] in savedlist){save.setImageResource(R.drawable.ic_baseline_delete_24)}
             sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(video) } ?: Glide.with(context).load(
                 File(status.fileUri)
             ).into(video)
@@ -98,19 +105,29 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 
                 }
-                var displayname =
-                    "statussaver2022@qwertyuio!@#" + status.title.toString().split(".")[0]
-                save.setOnClickListener {
+//                var displayname =
+//                    "statussaver2022@qwertyuio!@#" + status.title.toString().split(".")[0]
+                if(status.filetitle.split(".")[0] in savedlist){
+                    save.setOnClickListener {
+                        CoroutineScope(Dispatchers.IO).launch{
+                            deletePhotoFromInternalStorage(status.filetitle,context)
+                        }
+                    var action=ImageViewFragmentDirections.actionImageViewFragmentToImagesFragment()
+                        save.findNavController().navigate(action)
+                    }
+                }else{save.setOnClickListener {
+                    save.setImageResource(R.drawable.ic_baseline_delete_24)
                     CoroutineScope(Dispatchers.IO).launch {
                         launch {
-                            saveVideoGallery(context, displayname, Uri.parse(status.fileUri))
-                            saveVideoToInternalStorage(displayname,Uri.parse(status.fileUri),context)
-                        }
+                            saveVideoGallery(context, status.filetitle, Uri.parse(status.fileUri))}
+                      launch { saveVideoToInternalStorage(status.filetitle,Uri.parse(status.fileUri),context) }
+
 
 
                     }
 
-                }
+                }}
+
             }
 //            (holder as VideoViewHolder).video.setOnClickListener {
 //
@@ -131,25 +148,50 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 //                Log.d("lll", "pppppppppppppppppppppppppppppppppppppppppppppppppppppppp")
 //            }
 
-                save.setOnClickListener {
 
-                    var bm =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
-                    } else {
-                        MediaStore.Images.Media.getBitmap(context.contentResolver, status.fileUri.toUri())
+
+
+
+                if(status.filetitle.split(".")[0] in savedlist){
+                    save.setOnClickListener {
+                        CoroutineScope(Dispatchers.IO).launch{
+                            deletePhotoFromInternalStorage(status.filetitle,context)
+                        }
+                        var action=ImageViewFragmentDirections.actionImageViewFragmentToImagesFragment()
+                        save.findNavController().navigate(action)
                     }
-                    var displayname =
-                        "statussaver2022@qwertyuio!@#" + status.title.toString().split(".")[0]
-                    CoroutineScope(Dispatchers.IO).launch {
-                      launch{savePhotoGalley(context, displayname, bm)}
+                }else{save.setOnClickListener {
+                    save.setImageResource(R.drawable.ic_baseline_delete_24)
+                        var bm =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                            ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
+                        } else {
+                            MediaStore.Images.Media.getBitmap(context.contentResolver, status.fileUri.toUri())
+                        }
+//                        var displayname =
+//                            "statussaver2022@qwertyuio!@#" + status.title.toString().split(".")[0]
+//                        Log.d("pop",status.filetitle)
 
-                        launch {
-                            savePhotoToInternalStorage(displayname, bm, context)
+                        CoroutineScope(Dispatchers.IO).launch {
+                            launch{savePhotoGalley(context, status.filetitle, bm)}
+
+                            launch {
+                                savePhotoToInternalStorage(status.filetitle, bm, context)
+                            }
+
                         }
 
+
+
                     }
-                }
-            }
+
+                }}
+
+
+
+
+
+
+
 
 
         }
