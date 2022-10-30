@@ -19,6 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -53,11 +55,13 @@ import kotlin.math.log
 
 class ImagesFragment : Fragment() {
     lateinit var dialog: Dialog
-     lateinit var recyclerView: RecyclerView
+    lateinit var recyclerView: RecyclerView
     lateinit var documenturi: String
+    lateinit var progressBar: ProgressBar
     lateinit var grantpermissionbutton:Button
     lateinit var permissiontext:TextView
-      var isReadPermissionGranted:Boolean=false
+    lateinit var search:ImageView
+    var isReadPermissionGranted:Boolean=false
     var isWritePermissionGranted:Boolean=false
     lateinit var permissionlauncher: ActivityResultLauncher<Array<String>>
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -94,19 +98,20 @@ class ImagesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpPermissionDialog()
         setuprecyclerview()
-        Log.d("anmol", "gyedubgye")
+        progressBar=view.findViewById(R.id.progressBar)
+
         sdk29AndUp {
-            requestOrUpdatePermissions()
-            Log.d("anmol", "gyedubgye")
+
+
             checkIfPermissionGrantedForAndroid10AndAbove()
             grantpermissionbutton.setOnClickListener {
 
                 getpermissionforfolder()
 
             }
-            Log.d("anmol", "gyedubgye")
+
      }?:belowsdk29()
-        Log.d("anmol", "gyedubgye")
+
 
     }
 
@@ -126,12 +131,15 @@ class ImagesFragment : Fragment() {
             override fun onClick(p0: View?) {
                 dialog.dismiss()
                 progressBar.visibility=View.GONE
+//                permissiontext.visibility=View.VISIBLE
+//                permissiontext.text="Pls Grant Permission"
+//                search.visibility=View.GONE
             }
         })
 
         val grantpermissionbutton: Button = dialog.findViewById(R.id.grantpermission) as Button
         grantpermissionbutton.setOnClickListener(object : View.OnClickListener {
-            @RequiresApi(Build.VERSION_CODES.R)
+            @RequiresApi(Build.VERSION_CODES.Q)
             override fun onClick(p0: View?) {
                 getpermissionforfolder()
             }
@@ -208,10 +216,62 @@ class ImagesFragment : Fragment() {
 
 
    suspend fun showStatuses(treeUri:Uri){
-        var fileDoc= mutableListOf<DocumentFile>()
-      var job=  CoroutineScope(Dispatchers.IO).launch {
-            fileDoc=DocumentFile.fromTreeUri(requireContext(),treeUri)?.listFiles()!!.toMutableList()
-        }
+//
+//        var fileDoc= mutableListOf<DocumentFile>()
+//      var job=  CoroutineScope(Dispatchers.IO).launch {
+//            fileDoc=DocumentFile.fromTreeUri(requireContext(),treeUri)?.listFiles()!!.toMutableList()
+//        }
+//       job.join()
+//       var statusList= mutableListOf<Status>()
+//       if(fileDoc!=null && fileDoc.size>0){
+//           for(file:DocumentFile in fileDoc!!){
+//               if(!file.name!!.endsWith(".nomedia")){
+//                   statusList.add(Status(file.name.toString(),file.uri.toString(),file.lastModified()))
+//               }
+//
+//
+//           }
+//           if(statusList.size!=0){withContext(Dispatchers.Main){
+//
+//               var statusadapter=StatusAdapter()
+//               recyclerView.adapter=statusadapter
+//               recyclerView.visibility=View.VISIBLE
+//               for (item in statusList){
+//                   Log.d("lala", item.fileUri)
+//               }
+//               statusadapter.bindlist(statusList)
+//               progressBar.visibility=View.GONE
+//           }}else{
+//               progressBar.visibility=View.GONE
+//               search.visibility=View.VISIBLE
+//               permissiontext.visibility=View.VISIBLE
+//               permissiontext.text="No status Currently Available"
+//           }
+//
+//
+//
+//       }else if (fileDoc.size==0){
+//           withContext(Dispatchers.Main){
+//               progressBar.visibility=View.GONE
+//               permissiontext.visibility=View.VISIBLE
+//               search.visibility=View.GONE
+//               permissiontext.text="Pls Install WHatsApp "
+//           }}else{
+//           permissiontext.visibility=View.VISIBLE
+//           progressBar.visibility=View.GONE
+//           search.visibility=View.GONE
+//           permissiontext.text="Somethinf Went Wrong"
+//           }
+//
+//
+           withContext(Dispatchers.Main){
+               progressBar.visibility=View.VISIBLE
+           }
+
+       var fileDoc= mutableListOf<DocumentFile>()
+       var job=  CoroutineScope(Dispatchers.IO).launch {
+           fileDoc=DocumentFile.fromTreeUri(requireContext(),treeUri)?.listFiles()!!.toMutableList()
+       }
        job.join()
        var statusList= mutableListOf<Status>()
        if(fileDoc!=null && fileDoc.size>0){
@@ -222,31 +282,50 @@ class ImagesFragment : Fragment() {
 
 
            }
-           withContext(Dispatchers.Main){
 
-               var statusadapter=StatusAdapter()
-               recyclerView.adapter=statusadapter
-               recyclerView.visibility=View.VISIBLE
-               for (item in statusList){
-                   Log.d("lala", item.fileUri)
+           if(statusList.size!=0){
+               withContext(Dispatchers.Main){
+
+                   var statusadapter=StatusAdapter()
+                   recyclerView.adapter=statusadapter
+                   recyclerView.visibility=View.VISIBLE
+                   for (item in statusList){
+                       Log.d("lala", item.fileUri)
+                   }
+                   statusadapter.bindlist(statusList)
+                   progressBar.visibility=View.GONE
                }
-               statusadapter.bindlist(statusList)
-               progressBar.visibility=View.GONE
+           }else{
+               withContext(Dispatchers.Main){  permissiontext.visibility=View.VISIBLE
+                   permissiontext.textSize=(20).toFloat()
+                   permissiontext.text="No Status Currently Available"
+                   grantpermissionbutton.visibility=View.VISIBLE
+                   grantpermissionbutton.text="View Status "
+                   progressBar.visibility=View.GONE
+                   grantpermissionbutton.setOnClickListener {
+                       Log.d("mnb", "lafda")
+                   }
+
+
+
+               }
            }
+
 
 
        }else if (fileDoc.size==0){
            withContext(Dispatchers.Main){
                progressBar.visibility=View.GONE
                permissiontext.visibility=View.VISIBLE
-               permissiontext.text="No Status Currently Available"
+               permissiontext.text=" Hey Pls Install WhatsApp"
            }}else{
-           permissiontext.visibility=View.VISIBLE
-           permissiontext.text="Somethinf Went Wrong"
-           }
+               withContext(Dispatchers.Main){
+                   permissiontext.visibility=View.VISIBLE
+                   permissiontext.text="Somethinf Went Wrong"
+                   progressBar.visibility=View.GONE
+               }
 
-
-
+       }
 
 
 
@@ -339,7 +418,12 @@ checkIfPermissionGrantedForBelowSdk29()
                 withContext(Dispatchers.Main){
                     if(statuslist.size<=0){
                         permissiontext!!.visibility = View.VISIBLE
-                        permissiontext!!.setText("no files found")
+                        permissiontext!!.setText("Currently No status is Available")
+                        grantpermissionbutton.visibility=View.VISIBLE
+                        grantpermissionbutton.text="View Status"
+                        grantpermissionbutton.setOnClickListener {
+
+                        }
                     }else{
                         permissiontext!!.visibility = View.GONE
                         permissiontext!!.text = ""
@@ -356,7 +440,7 @@ checkIfPermissionGrantedForBelowSdk29()
                 withContext(Dispatchers.Main){
                     progressBar!!.visibility = View.GONE
                     permissiontext!!.visibility = View.VISIBLE
-                    permissiontext!!.setText("no files found")
+                    permissiontext!!.setText("Hey Pls Install WHatsApp in Your Phone")
                     Toast.makeText(activity, "no files found", Toast.LENGTH_SHORT)
                         .show()
                 }

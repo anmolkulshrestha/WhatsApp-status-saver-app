@@ -41,8 +41,10 @@ class StatusAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var video=itemview.findViewById<ImageView>(R.id.video_view)
 
         fun bind(status: Status){
+
             sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(video) }?:Glide.with(context).load(File(status.fileUri)).into(video)
-               }
+
+        }
 
 
 

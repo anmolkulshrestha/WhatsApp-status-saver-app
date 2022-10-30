@@ -1,12 +1,18 @@
 package com.example.whatsappstatussaver2022
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Rect
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Px
+import androidx.core.content.ContextCompat
 import androidx.core.view.doOnPreDraw
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
@@ -20,11 +26,15 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.ArrayList
 
 class ImageViewFragment : Fragment() {
     private val args by navArgs<ImageViewFragmentArgs>()
 lateinit var recyclerView: RecyclerView
 lateinit var save:FloatingActionButton
+    var isReadPermissionGranted:Boolean=false
+    var isWritePermissionGranted:Boolean=false
+    lateinit var permissionlauncher: ActivityResultLauncher<Array<String>>
     override fun onCreate(savedInstanceState: Bundle?) {
 
 
@@ -55,7 +65,16 @@ lateinit var save:FloatingActionButton
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+     requestOrUpdatePermissions()
+        permissionlauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
+                permissions->
+            //   isManageExternalstoragePermissionGranted=permissions[Manifest.permission.MANAGE_EXTERNAL_STORAGE] ?: isManageExternalstoragePermissionGranted
+            isReadPermissionGranted=permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: isReadPermissionGranted
+            isWritePermissionGranted=permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWritePermissionGranted
+           if(!isReadPermissionGranted){requestOrUpdatePermissions()}
+            if(!isWritePermissionGranted){requestOrUpdatePermissions()}
 
+        }
         recyclerView=view.findViewById(R.id.sliderrecyclerview)
 
         var layoutmanager=LinearLayoutManager(activity,LinearLayoutManager.HORIZONTAL,false)
@@ -70,6 +89,7 @@ lateinit var save:FloatingActionButton
 
 
         var adapter=StatusSliderAdapter()
+
         recyclerView.adapter=adapter
 
         adapter.bindlist(args.statuslist.toMutableList())
@@ -83,6 +103,33 @@ lateinit var save:FloatingActionButton
     override fun onDestroy() {
         super.onDestroy()
         activity?.findViewById<BottomNavigationView>(R.id.bottomNavigationView)?.visibility=View.VISIBLE
+    }
+    private fun requestOrUpdatePermissions(){
+
+        isReadPermissionGranted= ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.READ_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
+
+
+        isWritePermissionGranted= ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)== PackageManager.PERMISSION_GRANTED
+
+
+//        isManageExternalstoragePermissionGranted= ContextCompat.checkSelfPermission(this,Manifest.permission.MANAGE_EXTERNAL_STORAGE)==PackageManager.PERMISSION_GRANTED
+//        Log.d("anmol", isManageExternalstoragePermissionGranted.toString())
+        val permissionrequest:MutableList<String> = ArrayList()
+
+
+        if(!isReadPermissionGranted) {
+            permissionrequest.add(Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+        if(!isWritePermissionGranted) {
+            permissionrequest.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+
+        if(permissionrequest.isNotEmpty()){
+            permissionlauncher.launch(permissionrequest.toTypedArray())
+
+        }
+
     }
 
 }

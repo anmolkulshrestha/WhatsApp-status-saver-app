@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.*
 import android.net.Uri
 import android.os.Build
+import android.provider.MediaStore
 import android.system.Os.bind
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.net.toUri
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
@@ -36,21 +38,22 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
     inner class ImageViewHolder(itemview: View): RecyclerView.ViewHolder(itemview){
 
+
+
         var image=itemview.findViewById<ImageView>(R.id.iio)
         var save=itemview.findViewById<FloatingActionButton>(R.id.save)
 
-var ee=itemview.measuredHeight
+
         fun bind(status: Status) {
-            sdk29AndUp {
-                var bm=ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
+
+//                var bm=ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
+//
+//
+//image.setImageBitmap(bm)
+                sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(image) }?:Glide.with(context).load(File(status.fileUri)).into(image)
 
 
-image.setImageBitmap(bm)
 
-            }
-                ?:Glide.with(context).load(
-                    File(status.fileUri)
-                ).into(image)
         }
 
 
@@ -79,7 +82,7 @@ image.setImageBitmap(bm)
 
     }
 
-    @RequiresApi(Build.VERSION_CODES.P)
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         var status = statuslist[position]
 
@@ -130,12 +133,11 @@ image.setImageBitmap(bm)
 
                 save.setOnClickListener {
 
-                    var bm = ImageDecoder.decodeBitmap(
-                        ImageDecoder.createSource(
-                            context.contentResolver,
-                            status.fileUri.toUri()
-                        )
-                    )
+                    var bm =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
+                    } else {
+                        MediaStore.Images.Media.getBitmap(context.contentResolver, status.fileUri.toUri())
+                    }
                     var displayname =
                         "statussaver2022@qwertyuio!@#" + status.title.toString().split(".")[0]
                     CoroutineScope(Dispatchers.IO).launch {
