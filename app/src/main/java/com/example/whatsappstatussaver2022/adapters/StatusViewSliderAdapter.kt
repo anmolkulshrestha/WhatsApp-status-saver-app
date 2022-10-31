@@ -31,6 +31,7 @@ import java.io.File
 
 class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     lateinit var context: Context
+
     var statuslist:List<Status> = mutableListOf<Status>()
     var savedlist:List<String> = mutableListOf<String>()
     fun bindlist(statuslist:List<Status>){
@@ -112,11 +113,33 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                     delete.visibility=View.GONE
                 }
                 save.setOnClickListener {
+                      var should=true
+                var jobg=    CoroutineScope(Dispatchers.IO).launch {
+                        context.getSharedPreferences("PHOTOS_IN_GALLERY",Context.MODE_PRIVATE).let { sharedPreferences ->
+                            if(sharedPreferences.contains("shouldInGallery")){
+                                 should= sharedPreferences.getBoolean("shouldInGallery",true)
+
+                                Log.d("shared", should.toString())
+                            }else{
+                                sharedPreferences.edit().putBoolean("shouldInGallery",true)
+                                Log.d("shared1", should.toString())
+                                should=true
+                                Log.d("shared2", should.toString())
+                            }
+                        }
+                    }
 
                     CoroutineScope(Dispatchers.IO).launch {
-                        launch {
-                            saveVideoGallery(context, status.filetitle, Uri.parse(status.fileUri))}
-                      launch { saveVideoToInternalStorage(status.filetitle,Uri.parse(status.fileUri),context) }
+                        jobg.join()
+           if(should){
+               Log.d("shared", "rrrrrrrrrrrrr")
+               launch {
+                   saveVideoGallery(context, status.filetitle, Uri.parse(status.fileUri))}
+               launch { saveVideoToInternalStorage(status.filetitle,Uri.parse(status.fileUri),context) }
+
+           }else{
+               Log.d("shared", "vvvvvvvvvvvvvvvv")
+               launch { saveVideoToInternalStorage(status.filetitle,Uri.parse(status.fileUri),context) }}
 
 
 
@@ -160,19 +183,41 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                delete.visibility=View.GONE
            }
            save.setOnClickListener {
-
+                 var should=true
                var bm =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
                } else {
                    MediaStore.Images.Media.getBitmap(context.contentResolver, status.fileUri.toUri())
                }
+               var jobg=    CoroutineScope(Dispatchers.IO).launch {
+                   context.getSharedPreferences("PHOTOS_IN_GALLERY",Context.MODE_PRIVATE).let { sharedPreferences ->
+                       if(sharedPreferences.contains("shouldInGallery")){
+                           should= sharedPreferences.getBoolean("shouldInGallery",true)
+
+                           Log.d("shared", should.toString())
+                       }else{
+                           sharedPreferences.edit().putBoolean("shouldInGallery",true)
+                           Log.d("shared1", should.toString())
+                           should=true
+                           Log.d("shared2", should.toString())
+                       }
+                   }
+               }
 
                CoroutineScope(Dispatchers.IO).launch {
-                   launch{savePhotoGalley(context, status.filetitle, bm)}
+                   jobg.join()
+                   if(should){
+                       launch{savePhotoGalley(context, status.filetitle, bm)}
 
-                   launch {
-                       savePhotoToInternalStorage(status.filetitle, bm, context)
+                       launch {
+                           savePhotoToInternalStorage(status.filetitle, bm, context)
+                       }
+                   }else{
+                       launch {
+                           savePhotoToInternalStorage(status.filetitle, bm, context)
+                       }
                    }
+
 
                }
                save.visibility=View.GONE

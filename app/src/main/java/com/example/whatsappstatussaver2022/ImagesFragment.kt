@@ -218,54 +218,6 @@ class ImagesFragment : Fragment() {
 
 
    suspend fun showStatuses(treeUri:Uri){
-//
-//        var fileDoc= mutableListOf<DocumentFile>()
-//      var job=  CoroutineScope(Dispatchers.IO).launch {
-//            fileDoc=DocumentFile.fromTreeUri(requireContext(),treeUri)?.listFiles()!!.toMutableList()
-//        }
-//       job.join()
-//       var statusList= mutableListOf<Status>()
-//       if(fileDoc!=null && fileDoc.size>0){
-//           for(file:DocumentFile in fileDoc!!){
-//               if(!file.name!!.endsWith(".nomedia")){
-//                   statusList.add(Status(file.name.toString(),file.uri.toString(),file.lastModified()))
-//               }
-//
-//
-//           }
-//           if(statusList.size!=0){withContext(Dispatchers.Main){
-//
-//               var statusadapter=StatusAdapter()
-//               recyclerView.adapter=statusadapter
-//               recyclerView.visibility=View.VISIBLE
-//               for (item in statusList){
-//                   Log.d("lala", item.fileUri)
-//               }
-//               statusadapter.bindlist(statusList)
-//               progressBar.visibility=View.GONE
-//           }}else{
-//               progressBar.visibility=View.GONE
-//               search.visibility=View.VISIBLE
-//               permissiontext.visibility=View.VISIBLE
-//               permissiontext.text="No status Currently Available"
-//           }
-//
-//
-//
-//       }else if (fileDoc.size==0){
-//           withContext(Dispatchers.Main){
-//               progressBar.visibility=View.GONE
-//               permissiontext.visibility=View.VISIBLE
-//               search.visibility=View.GONE
-//               permissiontext.text="Pls Install WHatsApp "
-//           }}else{
-//           permissiontext.visibility=View.VISIBLE
-//           progressBar.visibility=View.GONE
-//           search.visibility=View.GONE
-//           permissiontext.text="Somethinf Went Wrong"
-//           }
-//
-//
            withContext(Dispatchers.Main){
                progressBar.visibility=View.VISIBLE
            }
@@ -466,6 +418,6 @@ checkIfPermissionGrantedForBelowSdk29()
 
 }
 private const val OPEN_DOCUMENT_REQUEST_CODE = 0x33
-private const val TAG = "MainActivity"
+ const val TAG = "MainActivity"
 private const val LAST_OPENED_URI_KEY =
     "com.example.android.ionopendocument.pef.LAS_OPENED_URI_KEY"
