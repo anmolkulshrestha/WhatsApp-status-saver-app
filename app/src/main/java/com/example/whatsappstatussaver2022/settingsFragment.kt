@@ -10,15 +10,16 @@ import android.view.ViewGroup
 import android.widget.Switch
 import android.widget.TextView
 import androidx.core.content.edit
+import kotlinx.android.synthetic.main.fragment_settings.*
 
 
 class settingsFragment : Fragment() {
-      lateinit var whatsappbusiness:Switch
-      lateinit var photosingaller:Switch
-      lateinit var contactus:TextView
-      lateinit var privacypolicy:TextView
-      lateinit var about:TextView
- var toggel:Boolean=true
+    lateinit var whatsappbusinesss: Switch
+    lateinit var photosingaller: Switch
+
+
+    var iswhatsappbusiness = false
+    var isInGallery: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -29,66 +30,92 @@ class settingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        var view=inflater.inflate(R.layout.fragment_settings, container, false)
+        var view = inflater.inflate(R.layout.fragment_settings, container, false)
         return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        whatsappbusiness=view.findViewById(R.id.whatsappbusiness)
-        photosingaller=view.findViewById(R.id.photosingallery)
-        contactus=view.findViewById(R.id.contactus)
-        privacypolicy=view.findViewById(R.id.privacypolicy)
-        about=view.findViewById(R.id.about)
-       requireContext().getSharedPreferences("PHOTOS_IN_GALLERY",Context.MODE_PRIVATE).let { sharedPreferences ->
-          if(sharedPreferences.contains("shouldInGallery")){
-          toggel=   sharedPreferences.getBoolean("shouldInGallery",true)
-             photosingaller.isChecked=!toggel
-          }else{
-              sharedPreferences.edit().putBoolean("shouldInGallery",true)
-              photosingaller.isChecked=false
+        whatsappbusinesss = view.findViewById(R.id.whatsappbusiness)
+        photosingaller = view.findViewById(R.id.photosingallery)
+//        contactus = view.findViewById(R.id.contactus)
+//        privacypolicy = view.findViewById(R.id.privacypolicy)
+//        about = view.findViewById(R.id.about)
 
-          }
-      }
-        requireContext().getSharedPreferences("PHOTOS_IN_GALLERY",Context.MODE_PRIVATE).let { sharedPreferences ->
-            if(sharedPreferences.contains("shouldInGallery")){
-                toggel=   sharedPreferences.getBoolean("shouldInGallery",true)
-                photosingaller.isChecked=!toggel
-            }else{
-                sharedPreferences.edit().putBoolean("shouldInGallery",true)
-                photosingaller.isChecked=false
 
-            }
-        }
-        requireContext().getSharedPreferences("WHATSAPP_BUSINESS",Context.MODE_PRIVATE).let { sharedPreferences ->
-            if(sharedPreferences.contains("isWhatsAppBusiness")){
-                toggel=   sharedPreferences.getBoolean("isWhatsAppBusiness",true)
-                whatsappbusiness.isChecked=!toggel
-            }else{
-                sharedPreferences.edit().putBoolean("isWhatsAppBusiness",true)
-                whatsappbusiness.isChecked=false
-
-            }
-        }
-
-       whatsappbusiness.setOnCheckedChangeListener { compoundButton, b ->
-            if(whatsappbusiness.isChecked){
-                requireContext().getSharedPreferences("WHATSAPP_BUSINESS", Context.MODE_PRIVATE).edit {
-                    putBoolean("isWhatsAppBusiness",false)
+        requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
+            .let { sharedPreferences ->
+                if (sharedPreferences.contains("shouldInGallery")) {
+                    isInGallery = sharedPreferences.getBoolean("shouldInGallery", true)
+                    photosingaller.isChecked = !isInGallery
+                } else {
+                    sharedPreferences.edit().putBoolean("shouldInGallery", true)
+                    isInGallery = true
+                    photosingaller.isChecked = !isInGallery
 
                 }
+            }
 
-            }else{
-                requireContext().getSharedPreferences("WHATSAPP_BUSINESS", Context.MODE_PRIVATE).edit {
-                    putBoolean("isWhatsAppBusiness",true)
+
+
+
+        requireContext().getSharedPreferences("WHATSAPP_BUSINES", Context.MODE_PRIVATE)
+            .let { sharedPreferences ->
+                if (sharedPreferences.contains("isWhatsAppBusiness")) {
+                    Log.d("hji", "1")
+                    iswhatsappbusiness = sharedPreferences.getBoolean("isWhatsAppBusiness", false)
+                    Log.d("hjji", iswhatsappbusiness.toString())
+                    whatsappbusinesss.isChecked = iswhatsappbusiness
+                } else {
+
+                    sharedPreferences.edit().putBoolean("isWhatsAppBusiness", false)
+                    iswhatsappbusiness = false
+                    Log.d("hjjji", iswhatsappbusiness.toString())
+                    whatsappbusinesss.isChecked = iswhatsappbusiness
+
                 }
             }
-        }
 
+
+
+
+        photosingaller.setOnCheckedChangeListener { compoundButton, b ->
+            if (photosingaller.isChecked) {
+                requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
+                    .edit {
+                        putBoolean("shouldInGallery", false)
+                        isInGallery = false
+                    }
+
+            } else {
+                requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
+                    .edit {
+                        putBoolean("shouldInGallery", true)
+                        isInGallery = true
+                    }
+            }
+
+
+        }
+            whatsappbusinesss.setOnCheckedChangeListener { compoundButton, b ->
+                if (whatsappbusinesss.isChecked) {
+                    requireContext().getSharedPreferences("WHATSAPP_BUSINES", Context.MODE_PRIVATE)
+                        .edit {
+                            putBoolean("isWhatsAppBusiness", true)
+
+                        }
+
+                } else {
+                    requireContext().getSharedPreferences("WHATSAPP_BUSINES", Context.MODE_PRIVATE)
+                        .edit {
+                            putBoolean("isWhatsAppBusiness", false)
+
+                        }
+                }
+
+
+            }
+
+        }
     }
 
-
-}
-
-private const val photosingallery="PHOTOS_IN_GALLERY"
-private const val whatsappbusiness="WHATSAPP_BUSINESS"

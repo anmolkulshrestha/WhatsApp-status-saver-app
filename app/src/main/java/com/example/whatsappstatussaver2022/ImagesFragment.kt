@@ -155,19 +155,58 @@ class ImagesFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.Q)
     fun checkIfPermissionGrantedForAndroid10AndAbove() {
-        requireContext().getSharedPreferences(TAG, Context.MODE_PRIVATE).let { sharedPreferences ->
-            if (sharedPreferences.contains(LAST_OPENED_URI_KEY)) {
-                val documentUri = sharedPreferences.getString(LAST_OPENED_URI_KEY, null)?.toUri()
+        var should=false
+        requireContext().getSharedPreferences("WHATSAPP_BUSINES",Context.MODE_PRIVATE).let { sharedPreferences ->
+            if(sharedPreferences.contains("isWhatsAppBusiness")){
+                should= sharedPreferences.getBoolean("isWhatsAppBusiness",false)
+                Log.d("fgh", should.toString())
+
+            }else{
+                sharedPreferences.edit().putBoolean("isWhatsAppBusiness",false)
+                Log.d("fg1", should.toString())
+                should=false
+                Log.d("fg2", should.toString())
+            }
+        }
+        if(!should){
+            requireContext().getSharedPreferences(TAG, Context.MODE_PRIVATE).let { sharedPreferences ->
+
+
+                if (sharedPreferences.contains(LAST_OPENED_URI_KEY)) {
+                    val documentUri = sharedPreferences.getString(LAST_OPENED_URI_KEY, null)?.toUri()
                         ?: return getPermissionDialog()
 
                     grantpermissionbutton.visibility=View.GONE
-                     permissiontext.visibility=View.GONE
-                CoroutineScope(Dispatchers.IO).launch {  showStatuses(documentUri) }
-            } else {
+                    permissiontext.visibility=View.GONE
+                    CoroutineScope(Dispatchers.IO).launch {  showStatuses(documentUri) }
+                } else {
 
-               getPermissionDialog()
+                    getPermissionDialog()
+                }
             }
+
+
+        }else{
+            requireContext().getSharedPreferences(TAG, Context.MODE_PRIVATE).let { sharedPreferences ->
+
+
+                if (sharedPreferences.contains("WhatsAppBusinessURIkey")) {
+                    val documentUri = sharedPreferences.getString("WhatsAppBusinessURIkey", null)?.toUri()
+                        ?: return getPermissionDialog()
+
+                    grantpermissionbutton.visibility=View.GONE
+                    permissiontext.visibility=View.GONE
+                    CoroutineScope(Dispatchers.IO).launch {  showStatuses(documentUri) }
+                } else {
+
+                    getPermissionDialog()
+                }
+            }
+
+
+
         }
+
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -176,12 +215,33 @@ class ImagesFragment : Fragment() {
         val storagemanager =
             requireContext().getSystemService(Context.STORAGE_SERVICE) as StorageManager
         val intent = storagemanager!!.primaryStorageVolume.createOpenDocumentTreeIntent()
+        var should=false
+       requireContext().getSharedPreferences("WHATSAPP_BUSINES",Context.MODE_PRIVATE).let { sharedPreferences ->
+            if(sharedPreferences.contains("isWhatsAppBusiness")){
+                should= sharedPreferences.getBoolean("isWhatsAppBusiness",false)
+                Log.d("hh", should.toString())
+            }else{
+                sharedPreferences.edit().putBoolean("isWhatsAppBusiness",false)
+                Log.d("hh1", should.toString())
+                should=false
+                Log.d("hh2", should.toString())
+            }
+        }
+        Log.d("lol", should.toString())
+if(!should){
+    Log.d("lol", should.toString())
+    intent.putExtra(
+    "android.provider.extra.INITIAL_URI",
+    "content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia/document/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses".toUri()
+)}else{
+
+    intent.putExtra(
+        "android.provider.extra.INITIAL_URI",
+        "content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp.w4b%2FWhatsApp Business%2FMedia/document/primary%3AAndroid%2Fmedia%2Fcom.whatsapp.w4b%2FWhatsApp Business%2FMedia%2F.Statuses".toUri())
+}
 
 
-        intent.putExtra(
-            "android.provider.extra.INITIAL_URI",
-            "content://com.android.externalstorage.documents/tree/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia/document/primary%3AAndroid%2Fmedia%2Fcom.whatsapp%2FWhatsApp%2FMedia%2F.Statuses".toUri()
-        )
+
 
       intent.putExtra("android.content.extra.SHOW_ADVANCED",true)
         startActivityForResult(intent, 9090)
@@ -195,10 +255,29 @@ class ImagesFragment : Fragment() {
         if (resultCode == RESULT_OK && requestCode == 9090) {
            var treeUri=data?.data
      if(treeUri!=null){
+         var should=false
+         requireContext().getSharedPreferences("WHATSAPP_BUSINES",Context.MODE_PRIVATE).let { sharedPreferences ->
+             if(sharedPreferences.contains("isWhatsAppBusiness")){
+                 should= sharedPreferences.getBoolean("isWhatsAppBusiness",false)
+
+             }else{
+                 sharedPreferences.edit().putBoolean("isWhatsAppBusiness",false)
+
+                 should=false
+
+             }
+         }
        requireContext().contentResolver.takePersistableUriPermission(treeUri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-         requireContext().getSharedPreferences(TAG, Context.MODE_PRIVATE).edit {
-         putString(LAST_OPENED_URI_KEY,treeUri.toString() )
-     }
+         if(!should){
+             requireContext().getSharedPreferences(TAG, Context.MODE_PRIVATE).edit {
+                 putString(LAST_OPENED_URI_KEY,treeUri.toString() )
+             }
+
+         }else{ requireContext().getSharedPreferences(TAG, Context.MODE_PRIVATE).edit {
+             putString("WhatsAppBusinessURIkey",treeUri.toString() )
+         }}
+
+
 
      dialog.dismiss()
          progressBar.visibility=View.VISIBLE
