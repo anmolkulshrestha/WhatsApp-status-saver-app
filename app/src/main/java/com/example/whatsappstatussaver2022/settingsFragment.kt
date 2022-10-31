@@ -47,7 +47,9 @@ lateinit var aboutDialog:Dialog
         privacypolicy = view.findViewById(R.id.privacypolicy)
         about = view.findViewById(R.id.about)
         setUpAboutDialog()
-about.setOnClickListener { aboutDialog.show() }
+        setUpPrivacyPolicyDialog()
+
+
 privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
         requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
             .let { sharedPreferences ->
@@ -143,10 +145,10 @@ privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
     fun setUpPrivacyPolicyDialog(){
         privacypolicyDialog = Dialog(requireContext())
         privacypolicyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-
+//        privacypolicy=privacypolicyDialog.findViewById(R.id.textView3)
         privacypolicyDialog.setContentView(R.layout.privacypolicy_dialog)
-
-//        about.setText("about"+"/n"+"Status Saver is an application which"+"/n"+"saves WhatsApp Status images and"+"/n"
+//
+//        privacypolicy.setText("about"+"/n"+"Status Saver is an application which"+"/n"+"saves WhatsApp Status images and"+"/n"
 //        +"videoes to yout device."+"/n"+"Status Saver is not affliated to WhatsApp in any manner")
 
 

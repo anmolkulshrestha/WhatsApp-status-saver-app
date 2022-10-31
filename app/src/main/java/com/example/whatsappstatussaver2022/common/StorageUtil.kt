@@ -3,17 +3,20 @@ package com.example.whatsappstatussaver2022.common
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import com.example.whatsappstatussaver2022.models.Status
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+import java.net.URLConnection
+
 
 inline fun <T> sdk29AndUp(onSdk29:()->T):T?{
     return  if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
@@ -171,4 +174,18 @@ suspend fun deletePhotoFromInternalStorage(filename: String,context: Context): B
         e.printStackTrace()
         false
     }
+}
+
+fun shareFile(file: Status,context:Context) {
+    val intentShareFile = Intent(Intent.ACTION_SEND)
+    intentShareFile.type = URLConnection.guessContentTypeFromName(file.title)
+    intentShareFile.putExtra(
+        Intent.EXTRA_STREAM,
+       file.fileUri.toUri()
+    )
+
+    //if you need
+    //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);
+    //intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
+    startActivity(context,Intent.createChooser(intentShareFile, "Share File"),null)
 }

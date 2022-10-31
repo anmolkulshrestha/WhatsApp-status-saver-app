@@ -48,6 +48,7 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         var image=itemview.findViewById<ImageView>(R.id.iio)
         var save=itemview.findViewById<FloatingActionButton>(R.id.save)
+        var share=itemview.findViewById<FloatingActionButton>(R.id.share)
        var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
 
         fun bind(status: Status) {
@@ -67,6 +68,7 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var video=itemview.findViewById<ImageView>(R.id.iio)
    var save=itemview.findViewById<FloatingActionButton>(R.id.save)
 var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
+        var share=itemview.findViewById<FloatingActionButton>(R.id.share)
         fun bind(status: Status){
             if(status.filetitle.split(".")[0] in savedlist){save.setImageResource(R.drawable.ic_baseline_delete_24)}
             sdk29AndUp { Glide.with(context).load(status.fileUri.toUri()).into(video) } ?: Glide.with(context).load(
@@ -104,7 +106,9 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
 
                 }
 
-
+              share.setOnClickListener {
+                  shareFile(status,context)
+              }
                 if(status.filetitle.split(".")[0] in savedlist){
                     save.visibility=View.GONE
                     delete.visibility=View.VISIBLE
@@ -113,6 +117,7 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                     delete.visibility=View.GONE
                 }
                 save.setOnClickListener {
+
                       var should=true
                 var jobg=    CoroutineScope(Dispatchers.IO).launch {
                         context.getSharedPreferences("PHOTOS_IN_GALLERY",Context.MODE_PRIVATE).let { sharedPreferences ->
@@ -182,6 +187,9 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                save.visibility=View.VISIBLE
                delete.visibility=View.GONE
            }
+                share.setOnClickListener {
+                    shareFile(status,context)
+                }
            save.setOnClickListener {
                  var should=true
                var bm =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
