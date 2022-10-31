@@ -4,10 +4,12 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import com.example.whatsappstatussaver2022.models.Status
@@ -188,4 +190,17 @@ fun shareFile(file: Status,context:Context) {
     //intentShareFile.putExtra(Intent.EXTRA_SUBJECT,"Sharing File Subject);
     //intentShareFile.putExtra(Intent.EXTRA_TEXT, "Sharing File Description");
     startActivity(context,Intent.createChooser(intentShareFile, "Share File"),null)
+}
+
+fun openWhatsApp(file:Status,context: Context){
+
+    val intentShareFile = Intent(Intent.ACTION_SEND)
+    intentShareFile.type = URLConnection.guessContentTypeFromName(file.title)
+    intentShareFile.putExtra(
+        Intent.EXTRA_STREAM,
+        file.fileUri.toUri()
+    )
+    intentShareFile.setPackage("com.whatsapp")
+
+    ContextCompat.startActivity(context,intentShareFile,null)
 }

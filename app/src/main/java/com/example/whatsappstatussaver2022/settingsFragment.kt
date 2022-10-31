@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.edit
 import kotlinx.android.synthetic.main.fragment_settings.*
 
@@ -47,10 +48,11 @@ lateinit var aboutDialog:Dialog
         privacypolicy = view.findViewById(R.id.privacypolicy)
         about = view.findViewById(R.id.about)
         setUpAboutDialog()
-        setUpPrivacyPolicyDialog()
+       setUpPrivacyPolicyDialog()
 
 
-privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
+privacypolicy.setOnClickListener { privacypolicyDialog.show() }
+        about.setOnClickListener { aboutDialog.show() }
         requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
             .let { sharedPreferences ->
                 if (sharedPreferences.contains("shouldInGallery")) {
@@ -89,6 +91,7 @@ privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
 
         photosingaller.setOnCheckedChangeListener { compoundButton, b ->
             if (photosingaller.isChecked) {
+                Toast.makeText(requireContext(),"Saved Images and Videoes will not be availabe in gallery", Toast.LENGTH_SHORT).show()
                 requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
                     .edit {
                         putBoolean("shouldInGallery", false)
@@ -96,6 +99,7 @@ privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
                     }
 
             } else {
+                Toast.makeText(requireContext(),"Saved Images and Videoes will  be availabe in gallery", Toast.LENGTH_SHORT).show()
                 requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
                     .edit {
                         putBoolean("shouldInGallery", true)
@@ -107,6 +111,7 @@ privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
         }
             whatsappbusinesss.setOnCheckedChangeListener { compoundButton, b ->
                 if (whatsappbusinesss.isChecked) {
+                    Toast.makeText(requireContext(),"Switched To WhatsApp Business", Toast.LENGTH_SHORT).show()
                     requireContext().getSharedPreferences("WHATSAPP_BUSINES", Context.MODE_PRIVATE)
                         .edit {
                             putBoolean("isWhatsAppBusiness", true)
@@ -114,6 +119,7 @@ privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
                         }
 
                 } else {
+                    Toast.makeText(requireContext(),"Switched To WhatsApp", Toast.LENGTH_SHORT).show()
                     requireContext().getSharedPreferences("WHATSAPP_BUSINES", Context.MODE_PRIVATE)
                         .edit {
                             putBoolean("isWhatsAppBusiness", false)
@@ -152,7 +158,7 @@ privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
 //        +"videoes to yout device."+"/n"+"Status Saver is not affliated to WhatsApp in any manner")
 
 
-privacypolicyDialog.show()
+
 
 
 

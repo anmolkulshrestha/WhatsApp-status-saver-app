@@ -78,10 +78,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="#00FF00"
+                    android:backgroundTint="#64FFDA"
                     android:clickable="true"
+                    android:src="@drawable/whatsapp_logo_png_2261__1_"
 
-                    app:backgroundTint="#64FFDA"
+
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.9"

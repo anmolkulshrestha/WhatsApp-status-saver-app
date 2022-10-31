@@ -52,16 +52,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:backgroundTint="#00FF00"
-                    android:clickable="true"
 
-                    app:backgroundTint="#64FFDA"
+                    android:clickable="true"
+                    android:src="@drawable/whatsapp_logo_png_2261__1_"
+
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.9"
                     app:layout_constraintStart_toEndOf="@+id/save"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/share"

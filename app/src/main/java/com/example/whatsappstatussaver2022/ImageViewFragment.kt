@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Px
@@ -65,7 +66,7 @@ lateinit var save:FloatingActionButton
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+    Toast.makeText(context,"SWIPE TO SEE NEXT",Toast.LENGTH_LONG).show()
         permissionlauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
                 permissions->
             //   isManageExternalstoragePermissionGranted=permissions[Manifest.permission.MANAGE_EXTERNAL_STORAGE] ?: isManageExternalstoragePermissionGranted

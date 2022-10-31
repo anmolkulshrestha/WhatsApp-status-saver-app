@@ -1,26 +1,29 @@
 package com.example.whatsappstatussaver2022.adapters
 
+
+
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.graphics.*
 import android.net.Uri
 import android.os.Build
+
 import android.provider.MediaStore
-import android.system.Os.bind
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContentProviderCompat.requireContext
+import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.whatsappstatussaver2022.ImageViewFragmentDirections
+import com.example.whatsappstatussaver2022.MainActivity
 import com.example.whatsappstatussaver2022.R
 import com.example.whatsappstatussaver2022.common.*
-
 import com.example.whatsappstatussaver2022.models.Status
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.coroutines.CoroutineScope
@@ -50,6 +53,7 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var save=itemview.findViewById<FloatingActionButton>(R.id.save)
         var share=itemview.findViewById<FloatingActionButton>(R.id.share)
        var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
+        var whatsapp=itemview.findViewById<FloatingActionButton>(R.id.whatsapp)
 
         fun bind(status: Status) {
             if(status.filetitle.split(".")[0] in savedlist){save.setImageResource(R.drawable.ic_baseline_delete_24)}
@@ -68,6 +72,7 @@ class StatusSliderAdapter(): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var video=itemview.findViewById<ImageView>(R.id.iio)
    var save=itemview.findViewById<FloatingActionButton>(R.id.save)
 var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
+        var whatsapp=itemview.findViewById<FloatingActionButton>(R.id.whatsapp)
         var share=itemview.findViewById<FloatingActionButton>(R.id.share)
         fun bind(status: Status){
             if(status.filetitle.split(".")[0] in savedlist){save.setImageResource(R.drawable.ic_baseline_delete_24)}
@@ -94,6 +99,7 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
         var status = statuslist[position]
 
         if (status.isVideo == 1) {
+
             (holder as VideoViewHolder).apply {
                 bind(status)
                 video.setOnClickListener {
@@ -105,7 +111,9 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
 
 
                 }
-
+          whatsapp.setOnClickListener {
+              openWhatsApp(status,context)
+          }
               share.setOnClickListener {
                   shareFile(status,context)
               }
@@ -117,7 +125,7 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                     delete.visibility=View.GONE
                 }
                 save.setOnClickListener {
-
+                        Toast.makeText(context,"Video is Saved",Toast.LENGTH_SHORT).show()
                       var should=true
                 var jobg=    CoroutineScope(Dispatchers.IO).launch {
                         context.getSharedPreferences("PHOTOS_IN_GALLERY",Context.MODE_PRIVATE).let { sharedPreferences ->
@@ -154,12 +162,28 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                 }
 
                 delete.setOnClickListener {
+                    val builder1: AlertDialog.Builder =AlertDialog.Builder(context)
+                    builder1.setMessage("Do You Want to Delete this Video?")
+                    builder1.setCancelable(true)
 
-                    CoroutineScope(Dispatchers.IO).launch{
-                            deletePhotoFromInternalStorage(status.filetitle,context)
-                        }
-                    var action=ImageViewFragmentDirections.actionImageViewFragmentToImagesFragment()
-                        save.findNavController().navigate(action)
+                    builder1.setPositiveButton(
+                        "Yes",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            CoroutineScope(Dispatchers.IO).launch{
+                                deletePhotoFromInternalStorage(status.filetitle,context)
+                            }
+                            var action=ImageViewFragmentDirections.actionImageViewFragmentToImagesFragment()
+                            save.findNavController().navigate(action)
+
+                           })
+
+                    builder1.setNegativeButton(
+                        "No",
+                        DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+
+                    val alert11: AlertDialog = builder1.create()
+                    alert11.show()
+
                 }
 
 
@@ -190,7 +214,11 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                 share.setOnClickListener {
                     shareFile(status,context)
                 }
+                whatsapp.setOnClickListener {
+                    openWhatsApp(status,context)
+                }
            save.setOnClickListener {
+          Toast.makeText(context,"Image saved",Toast.LENGTH_SHORT).show()
                  var should=true
                var bm =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                    ImageDecoder.decodeBitmap(ImageDecoder.createSource(context.contentResolver, status.fileUri.toUri()))
@@ -233,12 +261,28 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
            }
 
            delete.setOnClickListener {
+               val builder1: AlertDialog.Builder =AlertDialog.Builder(context)
+               builder1.setMessage("Do You Want to Delete this Photo?")
+               builder1.setCancelable(true)
 
-    CoroutineScope(Dispatchers.IO).launch{
-        deletePhotoFromInternalStorage(status.filetitle,context)
-    }
-    var action=ImageViewFragmentDirections.actionImageViewFragmentToImagesFragment()
-    save.findNavController().navigate(action)
+               builder1.setPositiveButton(
+                   "Yes",
+                   DialogInterface.OnClickListener { dialog, id ->
+                       CoroutineScope(Dispatchers.IO).launch{
+                           deletePhotoFromInternalStorage(status.filetitle,context)
+                       }
+                       var action=ImageViewFragmentDirections.actionImageViewFragmentToImagesFragment()
+                       save.findNavController().navigate(action)
+
+                   })
+
+               builder1.setNegativeButton(
+                   "No",
+                   DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+
+               val alert11: AlertDialog = builder1.create()
+               alert11.show()
+
 }
 
 
