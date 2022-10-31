@@ -72,8 +72,8 @@ lateinit var save:FloatingActionButton
             //   isManageExternalstoragePermissionGranted=permissions[Manifest.permission.MANAGE_EXTERNAL_STORAGE] ?: isManageExternalstoragePermissionGranted
             isReadPermissionGranted=permissions[Manifest.permission.READ_EXTERNAL_STORAGE] ?: isReadPermissionGranted
             isWritePermissionGranted=permissions[Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWritePermissionGranted
-           if(!isReadPermissionGranted){requestOrUpdatePermissions()}
-            if(!isWritePermissionGranted){requestOrUpdatePermissions()}
+           if(!isReadPermissionGranted || !isWritePermissionGranted){requestOrUpdatePermissions()}
+
 
         }
         requestOrUpdatePermissions()
