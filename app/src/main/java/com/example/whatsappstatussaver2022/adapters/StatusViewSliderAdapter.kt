@@ -218,6 +218,7 @@ var delete=itemview.findViewById<FloatingActionButton>(R.id.delete)
                     openWhatsApp(status,context)
                 }
            save.setOnClickListener {
+
           Toast.makeText(context,"Image saved",Toast.LENGTH_SHORT).show()
                  var should=true
                var bm =if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {

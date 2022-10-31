@@ -66,7 +66,7 @@ lateinit var save:FloatingActionButton
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-    Toast.makeText(context,"SWIPE TO SEE NEXT",Toast.LENGTH_LONG).show()
+    Toast.makeText(context,"SWIPE TO SEE NEXT",Toast.LENGTH_SHORT).show()
         permissionlauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
                 permissions->
             //   isManageExternalstoragePermissionGranted=permissions[Manifest.permission.MANAGE_EXTERNAL_STORAGE] ?: isManageExternalstoragePermissionGranted

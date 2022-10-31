@@ -13,6 +13,7 @@ import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.edit
+import com.example.whatsappstatussaver2022.common.sendemail
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 
@@ -23,6 +24,7 @@ class settingsFragment : Fragment() {
     lateinit var privacypolicy:TextView
     lateinit var about:TextView
 lateinit var aboutDialog:Dialog
+
     lateinit var privacypolicyDialog:Dialog
     var iswhatsappbusiness = false
     var isInGallery: Boolean = true
@@ -47,6 +49,9 @@ lateinit var aboutDialog:Dialog
         contactus = view.findViewById(R.id.contactus)
         privacypolicy = view.findViewById(R.id.privacypolicy)
         about = view.findViewById(R.id.about)
+        contactus.setOnClickListener {
+            sendemail(requireContext())
+        }
         setUpAboutDialog()
        setUpPrivacyPolicyDialog()
 

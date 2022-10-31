@@ -1,14 +1,15 @@
 package com.example.whatsappstatussaver2022.common
 
+import android.content.ActivityNotFoundException
 import android.content.ContentValues
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
@@ -203,4 +204,16 @@ fun openWhatsApp(file:Status,context: Context){
     intentShareFile.setPackage("com.whatsapp")
 
     ContextCompat.startActivity(context,intentShareFile,null)
+}
+
+fun sendemail(context: Context){
+    try {
+        val intent = Intent(Intent.ACTION_SENDTO)
+        intent.data = Uri.parse("mailto:"+"anmolsoftwaredeveloper12345@gmail.com") // only email apps should handle this
+      //  intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("example.yahoo.com"))
+        intent.putExtra(Intent.EXTRA_SUBJECT, "App feedback")
+        startActivity(context,intent,null)
+    } catch (ex: ActivityNotFoundException) {
+        Toast.makeText(context,"There is No email app in your device",Toast.LENGTH_SHORT)
+    }
 }
