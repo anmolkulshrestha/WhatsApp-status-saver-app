@@ -1,5 +1,6 @@
 package com.example.whatsappstatussaver2022
 
+import android.app.Dialog
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Switch
 import android.widget.TextView
 import androidx.core.content.edit
@@ -16,8 +18,11 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 class settingsFragment : Fragment() {
     lateinit var whatsappbusinesss: Switch
     lateinit var photosingaller: Switch
-
-
+    lateinit var contactus:TextView
+    lateinit var privacypolicy:TextView
+    lateinit var about:TextView
+lateinit var aboutDialog:Dialog
+    lateinit var privacypolicyDialog:Dialog
     var iswhatsappbusiness = false
     var isInGallery: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +43,12 @@ class settingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         whatsappbusinesss = view.findViewById(R.id.whatsappbusiness)
         photosingaller = view.findViewById(R.id.photosingallery)
-//        contactus = view.findViewById(R.id.contactus)
-//        privacypolicy = view.findViewById(R.id.privacypolicy)
-//        about = view.findViewById(R.id.about)
-
-
+        contactus = view.findViewById(R.id.contactus)
+        privacypolicy = view.findViewById(R.id.privacypolicy)
+        about = view.findViewById(R.id.about)
+        setUpAboutDialog()
+about.setOnClickListener { aboutDialog.show() }
+privacypolicy.setOnClickListener { setUpPrivacyPolicyDialog() }
         requireContext().getSharedPreferences("PHOTOS_IN_GALLERY", Context.MODE_PRIVATE)
             .let { sharedPreferences ->
                 if (sharedPreferences.contains("shouldInGallery")) {
@@ -117,5 +123,38 @@ class settingsFragment : Fragment() {
             }
 
         }
+
+    fun setUpAboutDialog(){
+        aboutDialog = Dialog(requireContext())
+        aboutDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        aboutDialog.setContentView(R.layout.about_dialog)
+
+//        about.setText("about"+"/n"+"Status Saver is an application which"+"/n"+"saves WhatsApp Status images and"+"/n"
+//        +"videoes to yout device."+"/n"+"Status Saver is not affliated to WhatsApp in any manner")
+
+
+
+
+
+
+
+    }
+    fun setUpPrivacyPolicyDialog(){
+        privacypolicyDialog = Dialog(requireContext())
+        privacypolicyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+
+        privacypolicyDialog.setContentView(R.layout.privacypolicy_dialog)
+
+//        about.setText("about"+"/n"+"Status Saver is an application which"+"/n"+"saves WhatsApp Status images and"+"/n"
+//        +"videoes to yout device."+"/n"+"Status Saver is not affliated to WhatsApp in any manner")
+
+
+privacypolicyDialog.show()
+
+
+
+
+    }
     }
 
